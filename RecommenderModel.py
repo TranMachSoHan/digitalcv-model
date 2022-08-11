@@ -1,14 +1,14 @@
-from cgitb import lookup
-import os 
 import pickle
+import os 
 
 NUM_RESULT = 5
 
 def load_data():
     print("Initializing recommender model")
 
-    lookup_table = 'C:/Users/RHT9HC/Documents/Digital_CV_Dataset/RecommendFlask-AssociationRule/rules.pkl'
-    with open(lookup_table, 'rb') as handle:
+    pickle_file = 'rules.pkl'
+
+    with open(pickle_file, 'rb') as handle:
         lookup_table = pickle.load(handle)
     return lookup_table
 

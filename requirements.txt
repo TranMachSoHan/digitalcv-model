@@ -1,0 +1,6 @@
+flask
+flask_restful
+pickle
+flask_cors
+pickle
+gunicorn==19.9.0
