@@ -1,5 +1,4 @@
 import pickle
-import os 
 
 NUM_RESULT = 5
 
