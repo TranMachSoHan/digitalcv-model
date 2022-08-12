@@ -1,7 +1,6 @@
 import pickle
-# import pandas 
+import pandas 
 import os 
-import re 
 NUM_RESULT = 5
 
 def load_data():
