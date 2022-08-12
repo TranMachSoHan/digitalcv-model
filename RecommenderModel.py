@@ -1,5 +1,4 @@
 import joblib
-import pandas 
 import os 
 NUM_RESULT = 5
 
