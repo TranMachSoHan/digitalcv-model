@@ -1,16 +1,19 @@
-# import pickle
+import pickle
 # import pandas 
-
+import os 
+import re 
 NUM_RESULT = 5
 
 def load_data():
     print("Initializing recommender model")
 
-    pickle_file = 'rules.pkl'
+    pickle_file = os.path.dirname(os.path.abspath(__file__))+'./pickle_folder/rules.pkl'
 
+    print(pickle_file)
     with open(pickle_file, 'rb') as handle:
-        lookup_table = ''
+        lookup_table = pickle.load(handle)
 
+    print(lookup_table)
     return lookup_table
 
 ### convert the series consequents and list out the courses 

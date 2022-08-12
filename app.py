@@ -1,4 +1,4 @@
-from crypt import methods
+from distutils.log import debug
 from flask import Flask,jsonify,request
 import RecommenderModel 
 
@@ -12,7 +12,7 @@ def index():
 
 @app.route('/load_data', methods = ['GET'])
 def load_data():
-    return 'load_data'
+    return RecommenderModel.load_data()
 
 @app.route("/recommend", methods = ['GET'])
 def recommend():
@@ -25,4 +25,4 @@ def recommend():
       
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
