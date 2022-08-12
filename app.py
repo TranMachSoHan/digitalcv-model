@@ -23,9 +23,10 @@ def load_data():
 def recommend():
     req_data = request.get_json()
     courseList = req_data['courseList']
-    print(courseList)
-    r = RecommenderModel.rcmd(courseList)
-    print(r)
+    try:
+        r = RecommenderModel.rcmd(courseList)
+    except Exception as e:
+        return f"Exception {e}"
     return jsonify(r)
       
 
