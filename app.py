@@ -3,6 +3,7 @@ from flask import Flask,jsonify,request
 import RecommenderModel 
 import os 
 import joblib
+import pandas
 
 app = Flask(__name__)
 
