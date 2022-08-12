@@ -1,5 +1,5 @@
-import pickle
-import pandas 
+# import pickle
+# import pandas 
 
 NUM_RESULT = 5
 
@@ -9,7 +9,7 @@ def load_data():
     pickle_file = 'rules.pkl'
 
     with open(pickle_file, 'rb') as handle:
-        lookup_table = pickle.load(handle)
+        lookup_table = ''
 
     return lookup_table
 
