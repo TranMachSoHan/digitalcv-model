@@ -1,7 +1,6 @@
 from flask import Flask,jsonify,request
 from flask_restful import reqparse, abort, Api, Resource
 from flask_cors import CORS
-import os
 import RecommenderModel 
 
 
@@ -25,5 +24,4 @@ def recommend():
       
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(debug=True, port=port)
+    app.run(debug=True, port=33507)
