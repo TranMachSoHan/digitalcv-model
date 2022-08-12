@@ -15,7 +15,7 @@ def index():
 def load_data():
     pickle_file = os.path.dirname(os.path.abspath(__file__))+'/pickle_folder/rules.pkl'
     with open(pickle_file, 'rb') as handle:
-        lookup_table = ""
+        lookup_table = "hello"
     return f"my_pickle : {pickle_file} {lookup_table}"
 
 @app.route("/recommend", methods = ['GET'])
