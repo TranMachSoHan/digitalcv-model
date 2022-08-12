@@ -1,3 +1,4 @@
+from crypt import methods
 from flask import Flask,jsonify,request
 import RecommenderModel 
 
@@ -9,6 +10,10 @@ app = Flask(__name__)
 def index():
     return 'Hello, from Flask!'
 
+@app.route('/load_data', methods = ['GET'])
+def load_data():
+    RecommenderModel.load_data()
+    
 @app.route("/recommend", methods = ['GET'])
 def recommend():
     req_data = request.get_json()
