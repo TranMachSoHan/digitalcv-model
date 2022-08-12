@@ -1,5 +1,5 @@
-import joblib
 import pandas
+import pickle
 NUM_RESULT = 5
 
 def load_data():
@@ -7,7 +7,8 @@ def load_data():
 
     # loading rule pickle file 
     try:
-        lookup_table = joblib.load('pickle_folder/rules.pkl')
+        with open('pickle_folder/rules.pkl', 'rb') as f:
+            lookup_table = pickle.load(f) 
     except Exception as e:
         # if it's wrong then return None 
         return None
