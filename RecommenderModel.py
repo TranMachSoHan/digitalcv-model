@@ -6,7 +6,7 @@ NUM_RESULT = 5
 def load_data():
     print("Initializing recommender model")
 
-    pickle_file = 'C:/Users/RHT9HC/Documents/Digital_CV_Dataset/RecommendFlask-AssociationRule/rules.pkl'
+    pickle_file = 'rules.pkl'
 
     with open(pickle_file, 'rb') as handle:
         lookup_table = pickle.load(handle)
