@@ -6,7 +6,7 @@ NUM_RESULT = 5
 def load_data():
     print("Initializing recommender model")
 
-    pickle_file = os.path.dirname(os.path.abspath(__file__))+'./pickle_folder/rules.pkl'
+    pickle_file = os.path.dirname(os.path.abspath(__file__))+'/pickle_folder/rules.pkl'
 
     print(pickle_file)
     with open(pickle_file, 'rb') as handle:
