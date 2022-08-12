@@ -19,7 +19,7 @@ def load_data():
         lookup_table = joblib.load('pickle_folder/rules.pkl')
     except Exception as e:
         return f"Exception {e}"
-    return f"my_pickle : {pickle_file} "
+    return f"my_pickle : {pickle_file} {lookup_table}"
 
 @app.route("/recommend", methods = ['GET'])
 def recommend():
