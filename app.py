@@ -1,5 +1,4 @@
-from copyreg import pickle
-from distutils.log import debug
+import pickle
 from flask import Flask,jsonify,request
 import RecommenderModel 
 import joblib
@@ -15,7 +14,8 @@ def index():
 @app.route('/load_data', methods = ['GET'])
 def load_data():
     try:
-        lookup_table = pickle.load('pickle_folder/rules.pkl')
+        with open('pickle_folder/rules.pkl', 'rb') as f:
+            lookup_table = pickle.load(f) 
     except Exception as e:
         return f"Exception {e}"
     return f"my_pickle : {lookup_table}"
