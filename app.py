@@ -12,8 +12,8 @@ def index():
 
 @app.route('/load_data', methods = ['GET'])
 def load_data():
-    RecommenderModel.load_data()
-    
+    return 'load_data'
+
 @app.route("/recommend", methods = ['GET'])
 def recommend():
     req_data = request.get_json()
