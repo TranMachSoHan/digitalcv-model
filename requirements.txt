@@ -5,3 +5,4 @@ fonttools==4.25.0
 pickle-mixin
 pandas==1.1.5
 gunicorn==20.1.0
+joblib

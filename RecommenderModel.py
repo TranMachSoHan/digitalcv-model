@@ -1,4 +1,4 @@
-import pickle
+import joblib
 import pandas 
 import os 
 NUM_RESULT = 5
@@ -8,9 +8,7 @@ def load_data():
 
     pickle_file = os.path.dirname(os.path.abspath(__file__))+'/pickle_folder/rules.pkl'
 
-    print(pickle_file)
-    with open(pickle_file, 'rb') as handle:
-        lookup_table = pickle.load(handle)
+    lookup_table = joblib.load(pickle_file)
 
     print(lookup_table)
     return lookup_table

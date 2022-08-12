@@ -2,7 +2,7 @@ from distutils.log import debug
 from flask import Flask,jsonify,request
 import RecommenderModel 
 import os 
-import pickle
+import joblib
 
 app = Flask(__name__)
 
@@ -14,7 +14,7 @@ def index():
 @app.route('/load_data', methods = ['GET'])
 def load_data():
     pickle_file = os.path.dirname(os.path.abspath(__file__))+'/pickle_folder/rules.pkl'
-    model=pickle.load(open(pickle_file,'rb'))
+    lookup_table = joblib.load(pickle_file)
     return f"my_pickle : {pickle_file} "
 
 @app.route("/recommend", methods = ['GET'])
