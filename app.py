@@ -2,7 +2,6 @@ from distutils.log import debug
 from flask import Flask,jsonify,request
 import RecommenderModel 
 import os 
-import pandas 
 import joblib
 
 app = Flask(__name__)
