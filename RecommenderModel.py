@@ -1,4 +1,5 @@
 import pickle
+import pandas 
 
 NUM_RESULT = 5
 
@@ -9,6 +10,7 @@ def load_data():
 
     with open(pickle_file, 'rb') as handle:
         lookup_table = pickle.load(handle)
+
     return lookup_table
 
 ### convert the series consequents and list out the courses 
