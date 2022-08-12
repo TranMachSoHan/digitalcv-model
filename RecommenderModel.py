@@ -1,14 +1,16 @@
 import joblib
 import pandas
-import os 
 NUM_RESULT = 5
 
 def load_data():
     print("Initializing recommender model")
 
-    pickle_file = os.path.dirname(os.path.abspath(__file__))+'/pickle_folder/rules.pkl'
-
-    lookup_table = joblib.load(pickle_file)
+    # loading rule pickle file 
+    try:
+        lookup_table = joblib.load('pickle_folder/rules.pkl')
+    except Exception as e:
+        # if it's wrong then return None 
+        return None
 
     print(lookup_table)
     return lookup_table
@@ -29,6 +31,11 @@ def rcmd(courses):
     print('Fetching recommendations')
     lookup_table = load_data()
 
+    # return empty course if there is exception 
+    if(lookup_table is None):
+        return {'courseName': []}
+
+    # initialize the df 
     temp_df = lookup_table
     resul_df = lookup_table
 

@@ -1,7 +1,6 @@
 from distutils.log import debug
 from flask import Flask,jsonify,request
 import RecommenderModel 
-import os 
 import joblib
 import pandas
 
@@ -14,12 +13,11 @@ def index():
 
 @app.route('/load_data', methods = ['GET'])
 def load_data():
-    pickle_file = os.path.dirname(os.path.abspath(__file__))+'/pickle_folder/rules.pkl'
     try:
         lookup_table = joblib.load('pickle_folder/rules.pkl')
     except Exception as e:
         return f"Exception {e}"
-    return f"my_pickle : {pickle_file} {lookup_table}"
+    return f"my_pickle : {lookup_table}"
 
 @app.route("/recommend", methods = ['GET'])
 def recommend():
