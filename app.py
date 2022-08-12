@@ -1,7 +1,6 @@
 import pickle
 from flask import Flask,jsonify,request
 import RecommenderModel 
-import joblib
 import pandas
 
 app = Flask(__name__)
