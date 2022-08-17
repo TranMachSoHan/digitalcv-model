@@ -8,6 +8,15 @@ from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import fpgrowth
 from mlxtend.frequent_patterns import association_rules
 
+from datetime import datetime
+except Exception, exc:
+    sttime = datetime.now().strftime('%Y%m%d_%H:%M:%S - ')
+    error = "ERROR! {}".format(exc)
+    log = 'log.txt'
+    with open(log, 'a') as logfile:
+        logfile.write(sttime + error + '\n')
+    raise
+    
 # filepath = '/content/drive/MyDrive/DigitalCV_CourseRecommendation/'
 filepath = './'
 
