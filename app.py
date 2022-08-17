@@ -1,9 +1,13 @@
 import pickle
 from flask import Flask,jsonify,request
+from flask_cors import CORS
 import pandas
 import RecommenderModel 
 
 app = Flask(__name__)
+
+# 
+CORS(app)
 
 @app.route('/',methods = ['GET'])
 def index():
@@ -25,11 +29,11 @@ def recommend():
     courseList = req_data['courseList']
 
     # avoid joblib cannot read pickle file 
-    # try:
-    # except Exception as e:
-    #     return f"Exception {e}"
+    try:
+        r = RecommenderModel.rcmd(courseList)
+    except Exception as e:
+        return f"Exception {e}"
 
-    r = RecommenderModel.rcmd(courseList)
 
     # return json type 
     return jsonify(r)
