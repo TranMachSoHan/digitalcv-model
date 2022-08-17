@@ -35,7 +35,20 @@ jobs:
       # Execute python 
       - name: Execute Python script # Run the DigitalCV_CourseRecommendation_AssociationRule.py
         run: python DigitalCV_CourseRecommendation_AssociationRule.py
-        
+      
+      - name: commit files
+        run: |
+          git config --local user.email "maklisa2000@gmail.com"
+          git config --local user.name "TranMachSoHan"
+          git add -A
+          git commit -m "TRIGGER CRON MODEL" -a
+      
+      - name: push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{secrets.SECRET_GITHUB_TOKEN}}
+          branch: master
+          
       # Deploy heroku app 
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
