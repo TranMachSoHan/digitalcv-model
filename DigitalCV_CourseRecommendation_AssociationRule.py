@@ -8,12 +8,45 @@ from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import fpgrowth
 from mlxtend.frequent_patterns import association_rules
 
-# filepath = '/content/drive/MyDrive/DigitalCV_CourseRecommendation/'
-filepath = './'
+from dotenv import dotenv_values
 
-# # reading the data
-# coursera_courses = pd.read_csv(f'{filepath}coursera_course/Coursera_courses.csv')
-# coursera_rating = pd.read_csv(f'{filepath}coursera_course/Coursera_reviews.csv')
+import sqlalchemy as db
+from sqlalchemy.ext.declarative import declarative_base
+
+# load all environment data values 
+temp = dotenv_values(".env")
+engine = db.create_engine(temp['SQLALCHEMY_DATABASE_URI'])
+
+# CREATE THE TABLE MODEL TO USE IT FOR QUERYING
+class Students(Base):
+ 
+    __tablename__ = 'courses'
+ 
+    first_name = db.Column(db.String(50),
+                           primary_key=True)
+    last_name  = db.Column(db.String(50),
+                           primary_key=True)
+    course     = db.Column(db.String(50))
+    score      = db.Column(db.Float)
+    
+# # CONNECT WITH MYSQL DATABASE 
+try:
+    if connection.is_connected():
+        # notify mysql successfully connected 
+        cursor = connection.cursor()
+        cursor.execute("select database();")
+        db = cursor.fetchone()
+        print("You're connected to dtabase: ", db)
+        print("\n*****************")
+
+        # get dataframe from mysql 
+        query = "Select * from courses;"
+        result_dataFrame = pd.read_sql(query,connection)
+        print(result_dataFrame.head())
+        
+except Error as e:
+    print("Error while connecting to MySQL", e)
+
 
 # print("############################")
 # print(f"Coursera rating value counts: ")
@@ -52,3 +85,8 @@ filepath = './'
 # print("\n############################")
 # print("#### CONVERTING RULES TO PICKLE ####")
 # rules.to_pickle('./pickle_folder/rules.pkl')
+
+if connection.is_connected():
+  cursor.close()
+  connection.close()
+  print("MySQL connection is closed")
