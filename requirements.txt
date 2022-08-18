@@ -5,6 +5,4 @@ pandas
 mlxtend
 numpy
 python-dotenv
-mysql-connector-python
-sqlalchemy
-DateTime
+datetime
