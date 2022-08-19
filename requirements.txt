@@ -6,3 +6,6 @@ mlxtend
 numpy
 python-dotenv
 datetime
+sqlalchemy
+pymysql
+pandasql

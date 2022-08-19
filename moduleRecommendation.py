@@ -6,7 +6,7 @@ class RecommenderModel :
     def __init__(self):
         return 
         
-    def load_data():
+    def load_data(self):
         print("Initializing recommender model")
 
         # loading rule pickle file 
@@ -21,7 +21,7 @@ class RecommenderModel :
         return lookup_table
 
     ### convert the series consequents and list out the courses 
-    def to_list_recommend_course(series,unique_course_list):
+    def to_list_recommend_course(self,series,unique_course_list):
         i = 0
         for item in series:
             for course in list(item):
@@ -32,9 +32,9 @@ class RecommenderModel :
         return unique_course_list
 
     # defining a function that recommends 10 most similar movies
-    def rcmd(courses):
+    def rcmd(self,courses):
         print('Fetching recommendations')
-        lookup_table = load_data()
+        lookup_table = self.load_data()
 
         # return empty course if there is exception 
         if(lookup_table is None):
@@ -63,5 +63,5 @@ class RecommenderModel :
                 resul_df = temp_df 
 
         json = {}
-        json['course_list'] = to_list_recommend_course(resul_df['consequents'],unique_course_list)    
+        json['course_list'] = self.to_list_recommend_course(resul_df['consequents'],unique_course_list)    
         return json

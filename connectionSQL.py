@@ -1,7 +1,7 @@
 # importing the libraries
 
 import numpy as np
-import pandas as pd
+import pandas 
 import os 
 
 from mlxtend.preprocessing import TransactionEncoder
@@ -13,39 +13,46 @@ from dotenv import dotenv_values
 import sqlalchemy as db
 from sqlalchemy.ext.declarative import declarative_base
 
+Base = declarative_base()
+
 # load all environment data values 
 temp = dotenv_values(".env")
-engine = db.create_engine(temp['SQLALCHEMY_DATABASE_URI'])
+
+# Database parameter
+host = temp['DBHOST']       
+user = temp['DBUSER']          
+passwd = temp['DBPASS']    
+database = temp['DBNAME']
+
+# DEFINE THE ENGINE (CONNECTION OBJECT)
+engine = db.create_engine(f'mysql+pymysql://{user}:{passwd}@{host}/{database}')
 
 # CREATE THE TABLE MODEL TO USE IT FOR QUERYING
-class Students(Base):
+class Courses(Base):
  
     __tablename__ = 'courses'
- 
-    first_name = db.Column(db.String(50),
-                           primary_key=True)
-    last_name  = db.Column(db.String(50),
-                           primary_key=True)
-    course     = db.Column(db.String(50))
-    score      = db.Column(db.Float)
     
-# # CONNECT WITH MYSQL DATABASE 
-try:
-    if connection.is_connected():
-        # notify mysql successfully connected 
-        cursor = connection.cursor()
-        cursor.execute("select database();")
-        db = cursor.fetchone()
-        print("You're connected to dtabase: ", db)
-        print("\n*****************")
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50),
+                           primary_key=True)
+    url  = db.Column(db.String(300),
+                           primary_key=True)
 
-        # get dataframe from mysql 
-        query = "Select * from courses;"
-        result_dataFrame = pd.read_sql(query,connection)
-        print(result_dataFrame.head())
-        
-except Error as e:
-    print("Error while connecting to MySQL", e)
+class Reviewers(Base): 
+    __reviewers__ = 'courses'
+    
+# SQLAlCHEMY ORM QUERY TO FETCH ALL RECORDS
+print("Getting courses from database ....")
+courses = pandas.read_sql_query(
+    sql = db.select([Courses.id,
+                     Courses.name,
+                     Courses.url,]),
+)
+
+print("Succesfully retrieved courses database. Here is the information: ")
+print('- Length of the courses in the database: ', len(courses))
+print('- Number of duplicated unique name are: ',courses.name.duplicated().sum())
+print('\n')
 
 
 # print("############################")
@@ -85,8 +92,3 @@ except Error as e:
 # print("\n############################")
 # print("#### CONVERTING RULES TO PICKLE ####")
 # rules.to_pickle('./pickle_folder/rules.pkl')
-
-if connection.is_connected():
-  cursor.close()
-  connection.close()
-  print("MySQL connection is closed")
