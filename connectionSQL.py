@@ -62,10 +62,12 @@ courses = pandas.read_sql_query(
                      Courses.name,
                      Courses.url,]), con=engine
 )
+courses = courses.rename(columns={'id': 'course_id'})
 
 print("Succesfully retrieved courses database. Here is the information: ")
 print('- Length of the courses in the database: ', len(courses))
 print('- Number of duplicated unique name are: ',courses.name.duplicated().sum())
+print(courses)
 print('Type of courses ', type(courses))
 print('\n')
 
@@ -73,8 +75,7 @@ print('\n')
 print("Getting reviews from database ....")
 
 reviews = pandas.read_sql_query(
-    sql = db.select([Reviews.id,
-                     Reviews.course_id,
+    sql = db.select([Reviews.course_id,
                      Reviews.employee_id,]), con=engine
 )
 
@@ -94,7 +95,7 @@ employees = pandas.read_sql_query(
                      Employees.last_name,]), con=engine
 )
 # Let the reviewers name to be first_name and last_name 
-employees['reviewers'] = employees['first_name'] + ' ' + employees['first_name']
+employees['reviewers'] = employees['last_name'] + ' ' + employees['first_name']
 employees = employees.rename(columns={'id': 'employee_id'})
 
 print("Succesfully retrieved employees database. Here is the information: ")
@@ -108,6 +109,7 @@ print('\n')
 
 ######################## START OF PROCESSED SQL DATA #######################
 course_reviews = reviews.merge(employees,on = 'employee_id',how = 'inner')
+course_reviews.drop(['first_name','last_name','employee_id'], axis=1, inplace=True)
 print(course_reviews)
 ######################## END OF PROCESSED SQL DATA #######################
 
@@ -122,53 +124,68 @@ print(zf.namelist() )
 coursera_reviews = pandas.read_csv(zf.open('final/Coursera_reviews.csv'))
 print(coursera_reviews)
 
+coursera_reviews = coursera_reviews[['reviewers','course_id']]
 # since the reviewers name has by which is not expected , then we will remove By word 
 coursera_reviews['reviewers'] = coursera_reviews['reviewers'].str.replace('By ','', regex=True)
 ######################## END READ COURSERA REVIEWS FILE ######################
 
 
 
-######################## START MERGE THE COURSERA REVIEWS WITH REVIEW FROM SQL ################################
+######################## START JOIN THE COURSERA REVIEWS WITH REVIEW FROM SQL ################################
+course_reviews = pandas.concat([course_reviews, coursera_reviews], ignore_index=True)
+print(course_reviews)
+######################## END JOIN THE COURSERA REVIEWS WITH REVIEW FROM SQL ################################
 
-######################## END MERGE THE COURSERA REVIEWS WITH REVIEW FROM SQL ################################
 
 
 
+############################## PROCESSED DATA WITH UNIQUE REVIEWER ##########################################
+# get unique array reviewer name 
+unique_reviewer = course_reviews['reviewers'].unique()
 
-# print("############################")
-# print(f"Coursera rating value counts: ")
-# print(f"{coursera_rating.course_id.value_counts()}")
+# generate dataframe with column reviewers and id 
+reviewers = pandas.DataFrame(unique_reviewer, columns=['reviewers'])
+reviewers['id'] = np.arange(1, reviewers.shape[0] + 1)
 
-# # Merging dataset 
-# merge = coursera_courses.merge(coursera_rating,on = 'course_id',how = 'inner')
+# merge and get the id 
+course_reviews = course_reviews.merge(reviewers,on = 'reviewers',how = 'inner')
+course_reviews.drop(['reviewers'], axis=1, inplace=True)
+print(course_reviews)
+############################## END OF PROCESSED DATA WITH UNIQUE REVIEWER ##########################################
 
-# merge['reviewers'] = [f"{x.replace('By ', '')}" for x in merge['reviewers']]
-# merge.drop(columns=['institution','date_reviews','rating', 'reviews'],inplace=True)
-# merge.rename(columns={'name': 'CourseName',
-#                  'course_url': 'UrlLink',
-#                  'reviewers': 'UserId', 'course_id':'ourseId' }, inplace=True)
 
-# print("\n############################")
-# print(f"Length of the merge unique user id: {len(merge.UserId.unique())}")
+print("############################")
+print(f"Course review value counts: ")
+print(f"{course_reviews.course_id.value_counts()}")
 
-# # Finalize merge list 
-# merge_list = merge.groupby(by = ["UserId"])["CourseName"].apply(list).reset_index()
-# merge_list = merge_list["CourseName"].tolist()
+# Merging dataset 
+merge = courses.merge(course_reviews,on = 'course_id',how = 'inner')
 
-# ## DATA TRANSFORMATION
-# te = TransactionEncoder()
-# te_ary = te.fit(merge_list).transform(merge_list)
-# df = pd.DataFrame(te_ary, columns=te.columns_)
+merge.rename(columns={'name': 'CourseName',
+                 'url': 'UrlLink',
+                 'id': 'UserId', 'course_id':'CourseId' }, inplace=True)
 
-# # Generate frequen itemsets 
-# fpgrowth_frequent_itemsets = fpgrowth(df, min_support=0.0001, use_colnames=True,max_len=5)
-# fpgrowth_frequent_itemsets.head()
-# fpgrowth_frequent_itemsets['itemsets'].apply(lambda x: len(x)).value_counts()
+print("\n############################")
+print(f"Length of the merge unique user id: {len(merge.UserId.unique())}")
 
-# # Association rules 
-# rules = association_rules(fpgrowth_frequent_itemsets,metric="lift",min_threshold=0.01)
+# Finalize merge list 
+merge_list = merge.groupby(by = ["UserId"])["CourseName"].apply(list).reset_index()
+merge_list = merge_list["CourseName"].tolist()
+
+## DATA TRANSFORMATION
+te = TransactionEncoder()
+te_ary = te.fit(merge_list).transform(merge_list)
+df = pandas.DataFrame(te_ary, columns=te.columns_)
+
+# Generate frequen itemsets 
+fpgrowth_frequent_itemsets = fpgrowth(df, min_support=0.0001, use_colnames=True,max_len=5)
+fpgrowth_frequent_itemsets.head()
+fpgrowth_frequent_itemsets['itemsets'].apply(lambda x: len(x)).value_counts()
+
+# Association rules 
+rules = association_rules(fpgrowth_frequent_itemsets,metric="lift",min_threshold=0.01)
 
 # # Save rule to pickle 
-# print("\n############################")
-# print("#### CONVERTING RULES TO PICKLE ####")
-# rules.to_pickle('./pickle_folder/rules.pkl')
+print("\n############################")
+print("#### CONVERTING RULES TO PICKLE ####")
+rules.to_pickle('./pickle_folder/rules.pkl')
