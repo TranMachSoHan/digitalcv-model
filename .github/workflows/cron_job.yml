@@ -34,7 +34,7 @@ jobs:
 
       # Execute python
       - name: Execute Python script # Run the DigitalCV_CourseRecommendation_AssociationRule.py
-        run: python DigitalCV_CourseRecommendation_AssociationRule.py
+        run: python connectionSQL.py
 
       - name: commit files
         run: |
