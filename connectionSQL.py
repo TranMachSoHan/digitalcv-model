@@ -22,10 +22,10 @@ Base = declarative_base()
 temp = dotenv_values(".env")
 
 # Database parameter
-host = temp['DBHOST']       
-user = temp['DBUSER']          
-passwd = temp['DBPASS']    
-database = temp['DBNAME']
+host = 'hc0vm00007.apac.bosch.com'
+user = 'digitalcv-dev'      
+passwd = 'tXS0CZSI+x3FLz4SG'
+database = 'digitalcv-dev'
 
 # DEFINE THE ENGINE (CONNECTION OBJECT)
 engine = db.create_engine(f'mysql+pymysql://{user}:{passwd}@{host}/{database}')
