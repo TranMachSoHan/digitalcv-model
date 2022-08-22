@@ -13,6 +13,9 @@ from dotenv import dotenv_values
 import sqlalchemy as db
 from sqlalchemy.ext.declarative import declarative_base
 
+# importing required modules
+from zipfile import ZipFile
+
 Base = declarative_base()
 
 # load all environment data values 
@@ -27,7 +30,7 @@ database = temp['DBNAME']
 # DEFINE THE ENGINE (CONNECTION OBJECT)
 engine = db.create_engine(f'mysql+pymysql://{user}:{passwd}@{host}/{database}')
 
-# CREATE THE TABLE MODEL TO USE IT FOR QUERYING
+################## CREATE THE TABLE MODEL TO USE IT FOR QUERYING ##################
 class Courses(Base):
  
     __tablename__ = 'courses'
@@ -38,21 +41,98 @@ class Courses(Base):
     url  = db.Column(db.String(300),
                            primary_key=True)
 
-class Reviewers(Base): 
-    __reviewers__ = 'courses'
-    
-# SQLAlCHEMY ORM QUERY TO FETCH ALL RECORDS
+class Reviews(Base): 
+    __tablename__ = 'reviews'
+    id = db.Column(db.Integer, primary_key=True)
+    course_id = db.Column(db.BIGINT)
+    employee_id = db.Column(db.BIGINT)
+
+class Employees(Base): 
+    __tablename__ = 'employees'
+    id = db.Column(db.BIGINT, primary_key=True)
+    first_name = db.Column(db.String(255))
+    last_name = db.Column(db.String(255))
+
+################ START OF READ SQL FILE ################ 
+
+################ QUERY TO FETCH ALL RECORDS FOR COURSES DATABASE ################ 
 print("Getting courses from database ....")
 courses = pandas.read_sql_query(
     sql = db.select([Courses.id,
                      Courses.name,
-                     Courses.url,]),
+                     Courses.url,]), con=engine
 )
 
 print("Succesfully retrieved courses database. Here is the information: ")
 print('- Length of the courses in the database: ', len(courses))
 print('- Number of duplicated unique name are: ',courses.name.duplicated().sum())
+print('Type of courses ', type(courses))
 print('\n')
+
+################ QUERY TO FETCH ALL RECORDS FOR REVIEWS DATABASE ##################
+print("Getting reviews from database ....")
+
+reviews = pandas.read_sql_query(
+    sql = db.select([Reviews.id,
+                     Reviews.course_id,
+                     Reviews.employee_id,]), con=engine
+)
+
+
+print("Succesfully retrieved reviews database. Here is the information: ")
+print('- Length of the reviews in the database: ', len(reviews))
+print('Type of reviews ', type(reviews))
+print(reviews)
+print('\n')
+
+################ QUERY TO FETCH ALL RECORDS FOR EMPLOYEES DATABASE ################ 
+print("Getting employees from database ....")
+
+employees = pandas.read_sql_query(
+    sql = db.select([Employees.id,
+                     Employees.first_name,
+                     Employees.last_name,]), con=engine
+)
+# Let the reviewers name to be first_name and last_name 
+employees['reviewers'] = employees['first_name'] + ' ' + employees['first_name']
+employees = employees.rename(columns={'id': 'employee_id'})
+
+print("Succesfully retrieved employees database. Here is the information: ")
+print('- Length of the employees in the database: ', len(employees))
+print('Type of employees ', type(employees))
+print(employees)
+print('\n')
+######################## END OF READ SQL FILE ##############################
+
+
+
+######################## START OF PROCESSED SQL DATA #######################
+course_reviews = reviews.merge(employees,on = 'employee_id',how = 'inner')
+print(course_reviews)
+######################## END OF PROCESSED SQL DATA #######################
+
+
+
+######################## READ COURSERA REVIEWS FILE ######################
+filepath = './'
+zf = ZipFile(f'{filepath}final.zip')
+# if you want to see all files inside zip folder
+print(zf.namelist() )
+# read csv coursera reviews from the zip 
+coursera_reviews = pandas.read_csv(zf.open('final/Coursera_reviews.csv'))
+print(coursera_reviews)
+
+# since the reviewers name has by which is not expected , then we will remove By word 
+coursera_reviews['reviewers'] = coursera_reviews['reviewers'].str.replace('By ','', regex=True)
+######################## END READ COURSERA REVIEWS FILE ######################
+
+
+
+######################## START MERGE THE COURSERA REVIEWS WITH REVIEW FROM SQL ################################
+
+######################## END MERGE THE COURSERA REVIEWS WITH REVIEW FROM SQL ################################
+
+
 
 
 # print("############################")
