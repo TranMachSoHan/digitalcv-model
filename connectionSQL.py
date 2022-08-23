@@ -139,19 +139,16 @@ print(course_reviews)
 
 
 
-############################## PROCESSED DATA WITH UNIQUE REVIEWER ##########################################
-# get unique array reviewer name 
-unique_reviewer = course_reviews['reviewers'].unique()
+############################## PROCESSED DATA WITH REVIEWS ##########################################
+coursera_reviews['reviewers']= coursera_reviews['reviewers'].apply(lambda row: row.encode('ascii',errors='ignore').decode())
+# remove duplicate item from reviewers and course id 
+coursera_reviews = coursera_reviews.drop_duplicates(subset=['reviewers', 'course_id'])
 
-# generate dataframe with column reviewers and id 
-reviewers = pandas.DataFrame(unique_reviewer, columns=['reviewers'])
-reviewers['id'] = np.arange(1, reviewers.shape[0] + 1)
-
-# merge and get the id 
-course_reviews = course_reviews.merge(reviewers,on = 'reviewers',how = 'inner')
-course_reviews.drop(['reviewers'], axis=1, inplace=True)
-print(course_reviews)
-############################## END OF PROCESSED DATA WITH UNIQUE REVIEWER ##########################################
+# Replace Blank Cells by NaN
+coursera_reviews = coursera_reviews.replace(r'^s*$', float('NaN'), regex = True)  # Replace blanks by NaN
+# then drop the nan value 
+coursera_reviews.dropna(inplace = True)     # Remove rows with NaN
+############################## END OF PROCESSED DATA WITH REVIEWS ##########################################
 
 
 print("############################")
@@ -163,13 +160,14 @@ merge = courses.merge(course_reviews,on = 'course_id',how = 'inner')
 
 merge.rename(columns={'name': 'CourseName',
                  'url': 'UrlLink',
-                 'id': 'UserId', 'course_id':'CourseId' }, inplace=True)
+                 'reviewers': 'UserId', 'course_id':'CourseId' }, inplace=True)
 
 print("\n############################")
 print(f"Length of the merge unique user id: {len(merge.UserId.unique())}")
 
 # Finalize merge list 
 merge_list = merge.groupby(by = ["UserId"])["CourseName"].apply(list).reset_index()
+print(merge_list)
 merge_list = merge_list["CourseName"].tolist()
 
 ## DATA TRANSFORMATION

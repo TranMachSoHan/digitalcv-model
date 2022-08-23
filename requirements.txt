@@ -9,3 +9,5 @@ datetime
 sqlalchemy
 pymysql
 pandasql
+mysql-connector
+pymysql
