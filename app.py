@@ -31,7 +31,7 @@ def read_file():
     return str
 
 @app.route('/writeFile',methods = ['GET'])
-def read_file():
+def write_file():
     with open("scr.txt", mode='a') as file:
         file.write('Printed string %s recorded at %s.\n' % 
             ("scr", datetime.datetime.now()))
@@ -48,8 +48,6 @@ def recommend():
         courseRecommender = r.rcmd(courseList)
     except Exception as e:
         return f"Exception {e}"
-
-
     # return json type 
     return jsonify(courseRecommender)
 
