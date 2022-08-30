@@ -30,6 +30,13 @@ def read_file():
         str+= line 
     return str
 
+@app.route('/writeFile',methods = ['GET'])
+def read_file():
+    with open("scr.txt", mode='a') as file:
+        file.write('Printed string %s recorded at %s.\n' % 
+            ("scr", datetime.datetime.now()))
+    return 'writing file'
+
 @app.route("/recommend", methods = ['POST'])
 def recommend():
     # get request param json 
