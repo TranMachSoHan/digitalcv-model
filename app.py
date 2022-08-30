@@ -19,9 +19,7 @@ r = moduleRecommendation.RecommenderModel()
 
 @app.route('/',methods = ['GET'])
 def index():
-    with open('scr.txt') as f:
-        lines = f.readlines()
-    return f'Hello, from Flask! '
+    return 'Hello, from Flask! '
 
 @app.route('/myFile',methods = ['GET'])
 def read_file():
@@ -29,7 +27,7 @@ def read_file():
     with open('scr.txt') as f:
         lines = f.readlines()
     for line in lines:
-        str+= line
+        str+= line 
     return str
 
 @app.route("/recommend", methods = ['POST'])
