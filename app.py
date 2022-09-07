@@ -13,7 +13,7 @@ app = Flask(__name__)
 # CORS policy 
 cors = CORS(app, resources={r"/recommend": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
-app.config['CORS_HEADERS'] = 'Access-Control-Allow-Origin'
+# app.config['CORS_HEADERS'] = 'Access-Control-Allow-Origin'
 
 # initialize Recommender Model class 
 r = moduleRecommendation.RecommenderModel()
