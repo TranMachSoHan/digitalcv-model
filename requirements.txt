@@ -12,4 +12,3 @@ pandasql
 mysql-connector
 pymysql
 APScheduler
-zipfile36
