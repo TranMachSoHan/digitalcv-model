@@ -27,10 +27,11 @@ def recommend():
     courseList = req_data['courseList']
 
     # avoid joblib cannot read pickle file 
-    try:
-        courseRecommender = r.rcmd(courseList)
-    except Exception as e:
-        return f"Exception {e}"
+    courseRecommender = r.recommend(courseList)
+    # try:
+        
+    # except Exception as e:
+    #     return f"Exception {e}"
     # return json type 
     return jsonify(courseRecommender)
 
