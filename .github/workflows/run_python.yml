@@ -35,4 +35,4 @@ jobs:
 
       # Execute python
       - name: Execute Python script # Run the DigitalCV_CourseRecommendation_AssociationRule.py
-        run: python zipfile.py
+        run: python myPython.py
