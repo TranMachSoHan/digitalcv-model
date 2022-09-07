@@ -1,6 +1,6 @@
 # importing required modules
 from json import load
-from zipfile import ZipFile
+from zipfile import *
 
 def load_data():
   print("Initializing recommender model")
