@@ -19,7 +19,6 @@ app.config['CORS_HEADERS'] = 'Access-Control-Allow-Origin'
 r = moduleRecommendation.RecommenderModel()
 
 @app.route('/',methods = ['GET'])
-@cross_origin(origin='*',headers=['Content-Type','Access-Control-Allow-Origin'])
 def index():
     return 'Hello, from Flask! '
 
