@@ -8,7 +8,7 @@ nltk.download('punkt')
 from nltk.tokenize import word_tokenize
 
 # importing required modules
-from zipfile import ZipFile
+from zipfile import *
 
 NUM_RESULT = 5
 
