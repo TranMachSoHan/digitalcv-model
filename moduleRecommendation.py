@@ -81,7 +81,9 @@ class RecommenderModel :
                         temp = contentBaseDf.iloc[i[0]].CourseName
                         result.insert(-1,temp)
         print(result)
-        return result
+        json = {}
+        json['course_list'] = result
+        return json
 
     # defining a function that recommends 10 most similar movies
     def rcmd(self,courses):

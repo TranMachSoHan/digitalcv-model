@@ -1,7 +1,7 @@
 import pickle
 from flask import Flask,jsonify,request
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import pandas
 import os
 import datetime  
@@ -12,15 +12,18 @@ app = Flask(__name__)
 
 # CORS policy 
 CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # initialize Recommender Model class 
 r = moduleRecommendation.RecommenderModel()
 
 @app.route('/',methods = ['GET'])
+@cross_origin()
 def index():
     return 'Hello, from Flask! '
 
 @app.route("/recommend", methods = ['POST'])
+@cross_origin()
 def recommend():
     # get request param json 
     req_data = request.get_json()
@@ -49,5 +52,4 @@ def scheduler_task():
     scheduler.add_job(func=test_job, trigger="interval", seconds=20)
 
 if __name__ == '__main__':
-    scheduler_task()
-    app.run(debug=True)
+    app.run()
