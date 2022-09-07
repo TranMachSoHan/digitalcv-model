@@ -8,7 +8,7 @@ nltk.download('punkt')
 from nltk.tokenize import word_tokenize
 
 # importing required modules
-from zipfile import *
+import zipfile
 
 NUM_RESULT = 5
 
@@ -20,7 +20,7 @@ class RecommenderModel :
         print("Initializing recommender model")
 
         filepath = './'
-        zf = ZipFile('./pickle_folder/contentBaseDf.zip')
+        zf = zipfile.ZipFile('./pickle_folder/contentBaseDf.zip')
         # if you want to see all files inside zip folder
         print(zf.namelist() )
 
