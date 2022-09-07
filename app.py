@@ -11,7 +11,7 @@ import moduleRecommendation
 app = Flask(__name__)
 
 # CORS policy 
-CORS(app)
+cors = CORS(app, resources={r"/recommend": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['CORS_HEADERS'] = 'Access-Control-Allow-Origin'
 
@@ -19,12 +19,12 @@ app.config['CORS_HEADERS'] = 'Access-Control-Allow-Origin'
 r = moduleRecommendation.RecommenderModel()
 
 @app.route('/',methods = ['GET'])
-@cross_origin()
+@cross_origin(origin='*',headers=['Content-Type','Access-Control-Allow-Origin'])
 def index():
     return 'Hello, from Flask! '
 
 @app.route("/recommend", methods = ['POST'])
-@cross_origin()
+@cross_origin(origin='*',headers=['Content-Type','Access-Control-Allow-Origin'])
 def recommend():
     # get request param json 
     req_data = request.get_json()

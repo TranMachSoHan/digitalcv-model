@@ -116,7 +116,6 @@ class RecommenderModel :
                     temp_df = lookup_table[lookup_table["antecedents"].apply(lambda x: self.check_word_the_same(word, x))].sort_values(ascending=False,by='lift')
                     print(temp_df)
 
-                    
                     resul_df = pandas.concat([resul_df, temp_df]).drop_duplicates()
  
         print(resul_df['consequents'])
