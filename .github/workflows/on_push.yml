@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: On Push Deploy Server
+name: Cron Job Deploy Server
 
 # Controls when the workflow will run
 on:
@@ -21,9 +21,18 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Deploy heroku app
-      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+      # Install python version
+      - name: Setup Python Version
+        uses: actions/checkout@v3
         with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "digitalcv-ml-model" #Must be unique in Heroku
-          heroku_email: "s3750789@rmit.edu.vn"
+          python-version: 3.8 # Install the python version needed
+
+      # Install python dependency
+      - name: Install Python dependencies
+        uses: py-actions/py-dependency-install@v3
+        with:
+          path: "requirements.txt"
+
+      # Execute python
+      - name: Execute Python script # Run the DigitalCV_CourseRecommendation_AssociationRule.py
+        run: python app.py
